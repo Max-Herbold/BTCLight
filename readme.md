@@ -3,9 +3,11 @@
 ### Follow the tutorial to setup prerequisites.
 
 ```
-sudo apt-get update;sudo apt-get install gcc make build-essential python-dev git scons swig
+sudo apt-get update;sudo apt-get install python3-pip python3-distutils gcc make build-essential python-dev git scons swig
 git clone https://github.com/jgarff/rpi_ws281x
 cd rpi_ws281x/python
+
+
 
 sudo python3 setup.py build 
 sudo python3 setup.py install 
