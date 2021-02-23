@@ -3,13 +3,14 @@
 ### Follow the tutorial to setup prerequisites.
 
 ```
-sudo apt-get update;sudo apt-get install python3-pip python3-distutils gcc make build-essential python-dev git scons swig
+sudo apt-get update;sudo apt-get apt-listchanges install python3-pip python3-distutils gcc make build-essential python-dev git scons swig
+
 git clone https://github.com/jgarff/rpi_ws281x
-cd rpi_ws281x/python
-
-
-
+cd rpi_ws281x
+sudo scons
+cd python
 sudo python3 setup.py build 
-sudo python3 setup.py install 
-sudo pip3 install adafruit-circuitpython-neopixel
+sudo python3 setup.py install
+
+sudo python3 -m pip install adafruit-circuitpython-neopixel
 ```
