@@ -4,6 +4,7 @@ import btc
 import time
 from rpi_ws281x import *
 import threading
+import requests
 
 # LED strip configuration:
 LED_COUNT      = 39      # Number of LED pixels.
@@ -20,17 +21,21 @@ def colorWipe(strip, color, change, wait_ms=50):
     """Wipe color across display a pixel at a time."""
     for i in range(change):
         strip.setPixelColor(i, color)
-        strip.show()
-        time.sleep(wait_ms/1000.0)
+        if wait_ms != 0:
+            strip.show()
+            time.sleep(wait_ms/1000.0)
         if i > strip.numPixels():
             break
+    strip.show()
 
 def backwardsWipe(strip, clearTo, prev, wait_ms=50):
     opp = (clearTo < 0) ^ (prev < 0) # checks if the two are on opposite sides
     for i in range(strip.numPixels(), abs((not opp) * clearTo)-1, -1):
         strip.setPixelColor(i, Color(0,0,0))
-        strip.show()
-        time.sleep(wait_ms/1000.0)
+        if wait_ms != 0:
+            strip.show()
+            time.sleep(wait_ms/1000.0)
+    strip.show()
 
 def update(strip,c,prev,colors,delay):
     backwardsWipe(strip,c,prev,delay)
@@ -41,8 +46,8 @@ strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, 
 # Intialize the library (must be called once before other functions).
 strip.begin()
 
-b = 20 # brightness (0-255)
-d = 5 # delay in ms
+b = 1 # brightness (0-255)
+d = 4 # delay in ms
 
 red = Color(b,0,0)
 green = Color(0,b,0)
@@ -50,16 +55,31 @@ colors= [red,green]
 
 prev = 0
 coin = btc.btc()
-try:
-    while 1:
-        c = coin.getNextPrice()
-        upd = threading.Thread(target=update, args=(strip,c,prev,colors,d))
-        upd.start()
+
+first = True
+change = 0
+while 1:
+    try:
+        while 1:
+            c = coin.getNextPrice()
+            if not first:
+                change += c
+            else:
+                first = False
+            upd = threading.Thread(target=update, args=(strip,c,prev,colors,d))
+            upd.start()
 
         #backwardsWipe(strip,c,prev,5)
         # colorWipe(strip,Color(0,0,0),strip.numPixels(),0) # will comment this out when have backward wipe
         #colorWipe(strip,colors[int(c>0)],abs(c),5)
-        prev = c
+            prev = c
 
-except KeyboardInterrupt:
-    backwardsWipe(strip,0,Color(0,0,5),10)
+    except KeyboardInterrupt:
+        print(f"Change during this run: {change}")
+        backwardsWipe(strip,0,Color(0,0,5),d)
+        break
+    except requests.exceptions.ConnectionError:
+        print(f"Some error connecting occurred. http status: {coin.s}")
+        time.sleep(1)
+    except btc.failedGet:
+        pass
