@@ -45,7 +45,7 @@ strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, 
 # Intialize the library (must be called once before other functions).
 strip.begin()
 
-b = 255 # brightness (0-255)
+b = 10 # brightness (0-255)
 d = 0 # delay in ms
 
 red = Color(b,0,0)
@@ -61,6 +61,7 @@ change = 0
 def quit():
     coin.log(f"Change during this run: {change}")
     backwardsWipe(strip,0,Color(0,0,0),d)
+    strip.show()
 
 while 1:
     try:
@@ -72,10 +73,6 @@ while 1:
                 first = False
             upd = threading.Thread(target=update, args=(strip,c,prev,colors,d))
             upd.start()
-
-        #backwardsWipe(strip,c,prev,5)
-        # colorWipe(strip,Color(0,0,0),strip.numPixels(),0) # will comment this out when have backward wipe
-        #colorWipe(strip,colors[int(c>0)],abs(c),5)
             prev = c
 
     except KeyboardInterrupt:
