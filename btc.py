@@ -30,12 +30,9 @@ class btc:
                 self.log(f'{datetime.datetime.now()} - ${v}{self.currency} - c: {c}')
                 self.last = v
                 return c
-#            else:
-#                print(f"same: {v}")
             time.sleep(0.1)
 
 class failedGet(Exception):
     def __init__(self, status):
-
         self.message = f"{datetime.datetime.now()} - Failed to get value from API endpoint. (Status code: {status})"
-        self.log(self.message)
+        btc().log(self.message) # create new object to log to same location... kinda iffy
