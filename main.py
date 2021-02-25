@@ -36,7 +36,6 @@ def backwardsWipe(strip, clearTo, prev, wait_ms=50):
         if wait_ms != 0:
             strip.show()
             time.sleep(wait_ms/1000.0)
-    strip.show()
 
 def update(strip,c,prev,colors,delay):
     backwardsWipe(strip,c,prev,delay)
@@ -46,8 +45,8 @@ strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, 
 # Intialize the library (must be called once before other functions).
 strip.begin()
 
-b = 252 # brightness (0-255)
-d = 1 # delay in ms
+b = 255 # brightness (0-255)
+d = 0 # delay in ms
 
 red = Color(b,0,0)
 green = Color(0,b,0)
