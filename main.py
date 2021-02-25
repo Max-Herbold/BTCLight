@@ -66,13 +66,14 @@ def quit():
 
 def updateB():
     global b
-    d = datetime.datetime.now()
-    day = d.day+(d.month-1)*30                   # gets the day of the year aprox
-    from_time = 2*math.cos(2*day*math.pi/365)+19 # will range from about 5 - 9pm
-    to_time = 9                                  # not too fussed what the end time is.
-    h = d.hour + d.minute / 60                   # gets the hour of day with decimal
-    b = int(255 - 254 * from_time < h | h < to_time)
-    time.sleep(60)
+    while 1:
+        d = datetime.datetime.now()
+        day = d.day+(d.month-1)*30                   # gets the day of the year aprox
+        from_time = 2*math.cos(2*day*math.pi/365)+19 # will range from about 5 - 9pm
+        to_time = 9                                  # not too fussed what the end time is.
+        h = d.hour + d.minute / 60                   # gets the hour of day with decimal
+        b = int(255 - 254 * from_time < h | h < to_time)
+        time.sleep(60)
 
 # TODO slot in updating b -- only need to do it once per minute buttt hmmmmm or even less.....
 # that should be okay now...
