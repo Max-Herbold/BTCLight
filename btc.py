@@ -1,6 +1,7 @@
 import requests
 import time
 import json
+import datetime
 
 class btc:
     def __init__(self):
@@ -9,6 +10,12 @@ class btc:
         self.url = "https://api.binance.com/api/v3/ticker/price?symbol="+self.symbol
         self.last = 0
         self.s = 200
+        self.log_file = "/home/pi/BTCLight/log.txt"
+
+    def log(self,string):
+        f = open(self.log_file, 'a')
+        f.write(str(string) + "\n")
+        f.close()
 
     def getNextPrice(self):
         while 1:
@@ -20,7 +27,7 @@ class btc:
             v = float(j['price'])
             if v != self.last:
                 c = int(round(v-self.last,0))
-                print(f'BTC PRICE: {v}{self.currency} - Change: {c}')
+                self.log(f'{datetime.datetime.now()} - ${v}{self.currency} - c: {c}')
                 self.last = v
                 return c
 #            else:
@@ -30,5 +37,5 @@ class btc:
 class failedGet(Exception):
     def __init__(self, status):
 
-        self.message = f"Failed to get value from API endpoint. (Status code: {status})"
-        print(self.message)
+        self.message = f"{datetime.datetime.now()} - Failed to get value from API endpoint. (Status code: {status})"
+        self.log(self.message)

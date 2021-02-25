@@ -14,3 +14,7 @@ sudo python3 setup.py install
 
 sudo python3 -m pip install adafruit-circuitpython-neopixel
 ```
+
+following successful setup to enable at startup change directory in `./servicefile/main.service` to current directory follow by `main.py` file should also be executable.
+Move main.service to /etc/systemd/system
+finally use `sudo systemctl enable main.service` (while in `/etc/systemd/system`)

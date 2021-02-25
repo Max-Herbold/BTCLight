@@ -1,0 +1,16 @@
+[Unit]
+Description=BTClights
+ConditionPathIsDirectory=/home/pi/BTCLight
+
+[Service]
+ExecStart=/home/pi/BTCLight/main.py
+NotifyAccess=main
+#WatchdogSec=10
+Restart=on-failure
+#CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+#LimitNPROC=1
+#ProtectHome=true
+#ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target
